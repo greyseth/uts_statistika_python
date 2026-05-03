@@ -72,6 +72,38 @@ def display_data(data, title):
 
     print(" ")
 
+def display_data_variables(datasets):
+    labels = [d[0] for d in datasets]
+    data_list = [d[1] for d in datasets]
+
+    def row(label, values):
+        print(f"- {label}:")
+        for lbl, val in zip(labels, values):
+            print(f"  - {lbl}: {val}")
+
+    row("Mean",    [numerik.get_mean(d) for d in data_list])
+    row("Median",  [numerik.get_median(d) for d in data_list])
+    row("Modus",   [f"{numerik.get_modus(d)['value']} ({numerik.get_modus(d)['count']} data)" for d in data_list])
+    row("Min",     [min(d) for d in data_list])
+    row("Max",     [max(d) for d in data_list])
+    row("Range",   [max(d) - min(d) for d in data_list])
+    row("Varians (s^2)",      [numerik.get_varians(d) for d in data_list])
+    row("Standar Deviasi",    [numerik.get_standard_deviation(d) for d in data_list])
+
+    print("- Kuartil:")
+    for i in range(3):
+        row(f"  Q{i+1}", [numerik.get_quarters(d)[i] for d in data_list])
+
+    def skew_label(s):
+        return "kiri" if s > 0.01 else ("tengah" if s == 0.01 else "kanan")
+
+    def kurt_label(k):
+        r = round(k)
+        return "runcing/leptokurtic" if r > 3 else ("normal/mesokurtic" if r == 3 else "datar/platykurtic")
+
+    row("Skewness", [f"{numerik.get_skewness(d)} (condong ke {skew_label(numerik.get_skewness(d))})" for d in data_list])
+    row("Kurtosis", [f"{numerik.get_kurtosis(d)} ({kurt_label(numerik.get_kurtosis(d))})" for d in data_list])
+
 
 # function data kategorik
 def display_kategorik(data, title):
@@ -98,9 +130,14 @@ def display_kategorik(data, title):
 
 
 # perhitungan data numerik
-display_data(math_score(), "---MATH SCORE---")
-display_data(reading_score(), "---READING SCORE---")
-display_data(writing_score(), "---WRITING SCORE---")
+# display_data(math_score(), "---MATH SCORE---")
+# display_data(reading_score(), "---READING SCORE---")
+# display_data(writing_score(), "---WRITING SCORE---")
+display_data_variables([
+    ("Math Score",    math_score()),
+    ("Reading Score", reading_score()),
+    ("Writing Score", writing_score()),
+])
 
 # data kategorik
 # display_kategorik(parental_education(), "---PARENTAL LEVEL OF EDUCATION---")

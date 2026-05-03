@@ -1,6 +1,5 @@
 import math
 
-
 def get_mean(data):
     return sum(data) / len(data)
     # sum semua data / jumlah data
