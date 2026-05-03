@@ -5,6 +5,7 @@
 import numerik
 import frekuensi
 import vis
+import chart
 
 import openpyxl
 
@@ -114,6 +115,9 @@ frekuensi.to_interval_table(math_score())["display_table"]()
 # print("---TABEL DISTRIBUSI FREKUENSI WRITING SCORE---")
 # frekuensi.to_interval_table(writing_score())["display_table"]()
 
-vis.display_histogram(math_score(), "Math Score", color='salmon')
-vis.display_histogram(reading_score(), "Reading Score", color='lightgreen')
-vis.display_histogram(writing_score(), "Writing Score", color='skyblue')
+vis.display_histogram(math_score(), frekuensi)
+
+edu_list = parental_education()
+math_list = math_score()
+
+chart.display_education_bar_chart(edu_list, math_list)

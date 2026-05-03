@@ -1,25 +1,35 @@
-import matplotlib.pyplot as pl
+import matplotlib.pyplot as plt
 
-def display_histogram(data, title, color='skyblue'):
-    """
-    Fungsi untuk menampilkan histogram menggunakan matplotlib
-    """
-    pl.figure(figsize=(10, 6))
+def display_histogram(data_math, frekuensi_module):
+    res = frekuensi_module.to_interval_table(data_math)
     
-    # Membuat histogram
-    # bins=15 membagi data ke dalam 15 kelompok rentang nilai
-    pl.hist(data, bins=15, color=color, edgecolor='black', alpha=0.7)
+    data_list = res.get('data', [])
+
+    labels = []
+    counts = []
+
+    for item in data_list:
+        label = f"{item['low']} - {item['high']}"
+        count = item['count']
+        
+        labels.append(label)
+        counts.append(count)
+
+    if not counts:
+        print("Data tidak ditemukan.")
+        return
+
+    plt.figure(figsize=(10, 6))
     
-    # Menghitung mean untuk garis referensi
-    mean_val = sum(data) / len(data)
-    pl.axvline(mean_val, color='red', linestyle='dashed', linewidth=2, label=f'Mean: {mean_val:.2f}')
+    plt.bar(labels, counts, color='#4472C4', edgecolor='black', width=0.6, zorder=3)
+
+    plt.plot(labels, counts, color='black', marker='o', markersize=4, linestyle='-', linewidth=1.5, zorder=4)
+
+    plt.title('HISTOGRAM TABEL DISTRIBUSI FREKUENSI', fontsize=12, fontweight='bold', pad=20)
+    plt.grid(axis='y', linestyle='-', alpha=0.5, zorder=0)
+    plt.xticks(rotation=45) 
     
-    # Pengaturan Judul dan Label
-    pl.title(f'Distribusi Frekuensi {title}', fontsize=14)
-    pl.xlabel('Skor', fontsize=12)
-    pl.ylabel('Jumlah Siswa (Frekuensi)', fontsize=12)
-    pl.legend()
-    pl.grid(axis='y', alpha=0.3)
-    
-    # Menampilkan grafik
-    pl.show()
+    plt.ylim(0, max(counts) * 1.2)
+
+    plt.tight_layout()
+    plt.show()

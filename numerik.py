@@ -58,20 +58,10 @@ def get_skewness(data):
 
 
 def get_kurtosis(data):
-    unique_values = list({v: 0 for v in data}.keys())
-    unique_values = [{"value": v, "count": 0} for v in unique_values]  # Ambil semua nilai unik
-
-    for u in unique_values:
-        for d in data:
-            if d == u["value"]:
-                u["count"] += 1  # Hitung jumlah kemunculan
-
+    n = len(data)
     mean = get_mean(data)
     sd = get_standard_deviation(data)
 
-    sigma = 0
-    for d in data:
-        fi = next(v["count"] for v in unique_values if v["value"] == d)
-        sigma += fi * (d - mean) ** 4  # fi * (Xi - Xrata)^4
+    sigma = sum((x - mean) ** 4 for x in data)
 
-    return sigma / (len(data) * sd ** 4)  # sigma / n*s^4
+    return sigma / (n * sd ** 4)
